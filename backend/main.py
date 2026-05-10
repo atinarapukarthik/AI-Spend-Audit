@@ -10,6 +10,7 @@ from typing import Any
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
+import httpx
 from pydantic import BaseModel, Field
 from supabase import create_client, Client
 
@@ -45,10 +46,7 @@ if not SUPABASE_KEY.startswith("eyJ"):
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-openai_client = OpenAI(
-    base_url="http://localhost:8082/v1",
-    api_key="free",
-)
+
 
 
 class ToolInput(BaseModel):
@@ -136,36 +134,56 @@ async def generate_llm_summary(
         company_text = company_name if company_name else "your company"
 
         system_prompt = f"""You are a financial advisor for startups. Write a concise, 
-personalized 100-word summary about AI tool spending optimization. 
-Use a professional, friendly tone. Be specific about the savings.
+        personalized 100-word summary about AI tool spending optimization. 
+        Use a professional, friendly tone. Be specific about the savings.
 
-Company: {company_text}
-Email: {email}
+        Company: {company_text}
+        Email: {email}
 
-Current spending analysis:
-{tools_text}
+        Current spending analysis:
+        {tools_text}
 
-Total potential monthly savings: ${total_savings}
+        Total potential monthly savings: ${total_savings}
 
-Write exactly 100 words summarizing the findings and actionable recommendations."""
+        Write exactly 100 words summarizing the findings and actionable recommendations."""
 
-        response = openai_client.chat.completions.create(
-            model="meta/llama3-70b-instruct",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": "Generate the summary."},
-            ],
-            temperature=0.7,
-            max_tokens=200,
-        )
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "http://localhost:8082/v1/messages",
+                json={
+                    "model": "anthropic/nvidia_nim/nvidia/llama-3.2-nemoretriever-300m-embed-v1",
+                    "messages": [
+                        {"role": "user", "content": f"{system_prompt}\n\nGenerate the summary."},
+                    ],
+                    "max_tokens": 200,
+                    "temperature": 0.7,
+                },
+                headers={"x-api-key": "freecc"},
+                timeout=120,
+            )
 
-        summary = response.choices[0].message.content.strip()
+            if response.status_code != 200:
+                raise Exception(f"NIM API error: {response.status_code} - {response.text}")
 
-        words = summary.split()
-        if len(words) > 100:
-            summary = " ".join(words[:100])
+            text_parts = []
+            for line in response.text.splitlines():
+                if line.startswith("data: "):
+                    try:
+                        import json
+                        event_data = json.loads(line[6:])
+                        if event_data.get("type") == "content_block_delta":
+                            delta = event_data.get("delta", {})
+                            if delta.get("type") == "text_delta":
+                                text_parts.append(delta.get("text", ""))
+                    except Exception:
+                        pass
 
-        return summary
+            summary = "".join(text_parts)
+            words = summary.split()
+            if len(words) > 100:
+                summary = " ".join(words[:100])
+
+            return summary
 
     except Exception as e:
         print(f"LLM generation failed: {e}")
@@ -174,24 +192,22 @@ Write exactly 100 words summarizing the findings and actionable recommendations.
 
 def upsert_lead(email: str, company_name: str | None) -> uuid.UUID:
     """Upsert the lead into the leads table and return the lead_id."""
-    try:
-        response = supabase.table("leads").upsert(
-            {"email": email, "company_name": company_name},
-            on_conflict="email",
-            returning="id",
-        ).execute()
+    response = supabase.table("leads").upsert(
+        {"email": email, "company_name": company_name},
+        on_conflict="email",
+        returning="minimal",
+    ).execute()
 
-        if not response.data or len(response.data) == 0:
-            raise ValueError("Failed to upsert lead")
+    fetch_response = supabase.table("leads").select("id").eq("email", email).execute()
 
-        lead_id = response.data[0].get("id")
-        if not lead_id:
-            raise ValueError("No lead_id returned from upsert")
+    if not fetch_response.data or len(fetch_response.data) == 0:
+        raise Exception("Failed to upsert lead")
 
-        return uuid.UUID(lead_id)
+    lead_id = fetch_response.data[0].get("id")
+    if not lead_id:
+        raise Exception("No lead_id returned")
 
-    except Exception as e:
-        raise Exception(f"Database error (leads): {str(e)}")
+    return uuid.UUID(lead_id)
 
 
 def create_audit(
@@ -223,5 +239,5 @@ def create_audit(
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.getenv("PORT", "8000"))
+    port = int(os.getenv("PORT", "8080"))
     uvicorn.run(app, host="0.0.0.0", port=port)

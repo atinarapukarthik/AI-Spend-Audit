@@ -67,12 +67,10 @@ export default async function BlueprintPage({ params }: PageProps) {
                 if (trimmed.match(/^#{1,3}\s/)) {
                   const level = trimmed.match(/^#+/)?.[0].length || 1;
                   const text = trimmed.replace(/^#+\s*/, "");
-                  const Tag = `h${Math.min(level + 1, 4)}` as keyof JSX.IntrinsicElements;
-                  return (
-                    <Tag key={i} className="text-zinc-200 font-bold mt-6 mb-2 text-lg">
-                      {text}
-                    </Tag>
-                  );
+                  const headingClass = "text-zinc-200 font-bold mt-6 mb-2 text-lg";
+                  if (level <= 1) return <h2 key={i} className={headingClass}>{text}</h2>;
+                  if (level === 2) return <h3 key={i} className={headingClass}>{text}</h3>;
+                  return <h4 key={i} className={headingClass}>{text}</h4>;
                 }
                 if (trimmed.match(/^[-*]\s/)) {
                   return (

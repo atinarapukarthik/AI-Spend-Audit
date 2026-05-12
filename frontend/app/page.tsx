@@ -14,6 +14,10 @@ const AI_TOOLS = [
   { id: "github_copilot", name: "GitHub Copilot" },
   { id: "claude", name: "Claude" },
   { id: "chatgpt", name: "ChatGPT" },
+  { id: "gemini", name: "Gemini" },
+  { id: "perplexity", name: "Perplexity Pro" },
+  { id: "notion_ai", name: "Notion AI" },
+  { id: "midjourney", name: "Midjourney" },
 ];
 
 const PLANS = [

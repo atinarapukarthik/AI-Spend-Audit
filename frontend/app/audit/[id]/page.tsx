@@ -15,17 +15,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
 
   return {
-    title: `Audit Results - ${id.slice(0, 8)}...`,
-    description: `AI spending audit results and savings recommendations for your team`,
+    title: `Tactical Resource Memorandum — ${id.slice(0, 8)}`,
+    description: `Strategic AI spend optimisation analysis and capital reallocation assessment`,
     openGraph: {
-      title: `AI Spend Audit Results`,
-      description: `Discover your potential savings on AI tool subscriptions`,
+      title: `Tactical Resource Memorandum — AI Spend Audit`,
+      description: `Classified strategic analysis of organisational AI tool capital expenditure and optimisation surface`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `AI Spend Audit Results`,
-      description: `View your personalized AI tool spending analysis and savings recommendations`,
+      title: `Tactical Resource Memorandum — AI Spend Audit`,
+      description: `Strategic analysis of AI tool expenditure with actionable recommendations`,
     },
   };
 }
@@ -59,7 +59,6 @@ export default async function AuditResultsPage({ params }: PageProps) {
   const totalAnnualSavings = totalMonthlySavings * 12;
 
   const isHighValue = totalMonthlySavings > 500;
-  const isOptimized = totalMonthlySavings < 100;
 
   const formattedDate = new Date(created_at).toLocaleDateString("en-US", {
     year: "numeric",
@@ -68,173 +67,152 @@ export default async function AuditResultsPage({ params }: PageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 py-8 px-4">
+    <div className="min-h-screen bg-zinc-950 py-12 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-            Your AI Spend Audit Results
-          </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Generated on {formattedDate}
-          </p>
-        </div>
 
-        {/* Hero Metric Card */}
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
-          <div className="text-center">
-            <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-2">
-              Total Potential Savings
+        {/* Header — Classified Document Masthead */}
+        <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 overflow-hidden">
+          <div className="border-b border-zinc-800 px-8 py-5">
+            <p className="text-xs text-zinc-500 font-mono uppercase tracking-widest mb-1">
+              CLASSIFIED // TACTICAL RESOURCE MEMORANDUM
             </p>
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <span className="text-5xl font-bold text-green-600 dark:text-green-400">
-                ${totalMonthlySavings.toLocaleString()}
-              </span>
-              <span className="text-xl text-zinc-500 dark:text-zinc-400">/mo</span>
+            <p className="text-sm text-zinc-600 font-mono">
+              Issued: {formattedDate} &nbsp;//&nbsp; Ref: {id.slice(0, 8)}
+            </p>
+          </div>
+
+          {/* Hero Metric */}
+          <div className="px-8 py-8 text-center border-b border-zinc-800">
+            <p className="text-xs text-zinc-500 font-mono uppercase tracking-wider mb-3">
+              Total Capital Liquidity Recovery Identified
+            </p>
+            <div className="text-5xl font-bold text-zinc-100 font-mono tracking-tight">
+              ${totalMonthlySavings.toLocaleString()}
+              <span className="text-lg text-zinc-500 ml-2">/mo</span>
             </div>
-            <p className="text-2xl font-semibold text-zinc-700 dark:text-zinc-300">
-              ${totalAnnualSavings.toLocaleString()}/year
+            <p className="text-lg text-zinc-400 font-mono mt-2">
+              ${totalAnnualSavings.toLocaleString()}/yr
             </p>
           </div>
         </div>
 
-        {/* AI Summary Card */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                AI Analysis
-              </h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Personalized recommendations for your team
-              </p>
+        {/* Tactical Resource Memorandum — AI Summary */}
+        <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 overflow-hidden">
+          <div className="border-b border-zinc-800 px-8 py-4">
+            <p className="text-xs text-zinc-500 font-mono uppercase tracking-widest">
+              MEMORANDUM BODY
+            </p>
+          </div>
+          <div className="px-8 py-6">
+            <div className="text-zinc-300 leading-relaxed font-mono text-sm space-y-4 whitespace-pre-line">
+              {ai_summary || "Analysis incomplete. Memorandum not yet generated."}
             </div>
           </div>
-          <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            {ai_summary || "Your audit is being processed. Results will be available shortly."}
-          </p>
         </div>
 
-        {/* Conditional CTA */}
-        {isHighValue ? (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 rounded-2xl p-8 border border-amber-200 dark:border-amber-800 text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-              Save ${totalMonthlySavings.toLocaleString()}/month Starting Today
-            </h2>
-            <p className="text-zinc-600 dark:text-zinc-400 mb-6">
-              Book a free Credex consultation to implement these optimizations with zero risk.
+        {/* Conditional Action — High Value Only */}
+        {isHighValue && (
+          <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 px-8 py-6 text-center">
+            <p className="text-xs text-zinc-500 font-mono uppercase tracking-wider mb-3">
+              Action Required — Capital Recovery Threshold Exceeded
+            </p>
+            <p className="text-sm text-zinc-400 font-mono mb-5">
+              Liquidity leakage of ${totalMonthlySavings.toLocaleString()}/mo detected.
+              Schedule a strategic intervention to capture identified yield.
             </p>
             <a
               href="https://calendly.com/credex/ai-spend-audit"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              className="inline-block px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 font-mono text-sm uppercase tracking-wider transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              Book Credex Consultation
+              Schedule Strategic Intervention
             </a>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-4">
-              Free 30-min optimization session • No commitment required
-            </p>
-          </div>
-        ) : isOptimized ? (
-          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-2xl p-8 border border-emerald-200 dark:border-emerald-800 text-center">
-            <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-              Your Stack is Highly Optimized
-            </h2>
-            <p className="text-zinc-600 dark:text-zinc-400">
-              Great job! Your current AI tool configuration is already cost-effective. 
-              Consider exploring advanced features or enterprise upgrades to unlock more value.
-            </p>
-          </div>
-        ) : (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-200 dark:border-zinc-800 text-center">
-            <p className="text-zinc-600 dark:text-zinc-400">
-              You can save ${totalMonthlySavings}/month with minor plan adjustments. 
-              Review the breakdown below for specific recommendations.
-            </p>
           </div>
         )}
 
-        {/* Tool Breakdown */}
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
-          <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50 mb-6">
-            Tool-by-Tool Breakdown
-          </h3>
-          
-          {tools.length === 0 ? (
-            <p className="text-zinc-500 dark:text-zinc-400 text-center py-8">
-              No tools analyzed yet.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {tools.map((tool: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-zinc-200 dark:bg-zinc-700 rounded-lg flex items-center justify-center">
-                      <span className="text-lg font-bold text-zinc-600 dark:text-zinc-300">
-                        {tool.tool_name?.charAt(0) || "?"}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-zinc-900 dark:text-zinc-50">
-                        {tool.tool_name || tool.tool}
-                      </p>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                        {tool.current_plan} → {tool.recommended_plan}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="text-right">
-                    {tool.monthly_savings > 0 ? (
-                      <>
-                        <p className="text-lg font-bold text-green-600 dark:text-green-400">
-                          -${tool.monthly_savings}/mo
-                        </p>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                          ${tool.current_spend} → ${tool.recommended_spend}
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                        Already optimized
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Protocol: Continuous Monitoring — Visible on ALL states */}
+        <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 px-8 py-6">
+          <p className="text-xs text-zinc-500 font-mono uppercase tracking-widest mb-3">
+            Protocol: Continuous Monitoring
+          </p>
+          <p className="text-sm text-zinc-400 font-mono mb-5">
+            Activate monitoring to receive tactical alerts if market variables (pricing) shift
+            or if higher-yield assets emerge.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-lg">
+            <input
+              type="email"
+              placeholder="Email address"
+              className="flex-1 px-4 py-3 bg-zinc-900 border border-zinc-700 text-zinc-200 font-mono text-sm placeholder:text-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
+            />
+            <button className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 font-mono text-sm uppercase tracking-wider transition-colors">
+              Initialize Monitoring
+            </button>
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
-          <p>
-            Powered by{" "}
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-              Credex AI
-            </span>
+        {/* Tool-by-Tool Breakdown */}
+        <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 overflow-hidden">
+          <div className="border-b border-zinc-800 px-8 py-4">
+            <p className="text-xs text-zinc-500 font-mono uppercase tracking-widest">
+              Asset Inventory — Variable Breakdown
+            </p>
+          </div>
+          <div className="px-8 py-6">
+            {tools.length === 0 ? (
+              <p className="text-zinc-500 font-mono text-sm text-center py-4">
+                No variables analysed.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {tools.map((tool: any, index: number) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border border-zinc-800 bg-zinc-900/30"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-9 h-9 border border-zinc-700 flex items-center justify-center">
+                        <span className="text-sm font-mono font-bold text-zinc-400">
+                          {tool.tool_name?.charAt(0) || "?"}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-mono text-sm font-semibold text-zinc-200">
+                          {tool.tool_name || tool.tool}
+                        </p>
+                        <p className="text-xs font-mono text-zinc-500">
+                          {tool.current_plan} → {tool.recommended_plan}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {tool.monthly_savings > 0 ? (
+                        <>
+                          <p className="text-sm font-mono font-bold text-zinc-300">
+                            -${tool.monthly_savings}/mo
+                          </p>
+                          <p className="text-xs font-mono text-zinc-600">
+                            ${tool.current_spend} → ${tool.recommended_spend}
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-xs font-mono text-zinc-600">
+                          Stable equilibrium
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer — Classification Footer */}
+        <div className="text-center border-t border-zinc-800 pt-6">
+          <p className="text-xs font-mono text-zinc-700">
+            Credex Strategic Analysis Engine &nbsp;//&nbsp; {formattedDate}
           </p>
         </div>
       </div>

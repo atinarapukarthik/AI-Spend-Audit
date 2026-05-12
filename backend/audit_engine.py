@@ -33,6 +33,35 @@ PRICING_CONSTANTS: dict[str, dict[str, Any]] = {
         "team": {"monthly": 25, "description": "Team - $25/user/month"},
         "enterprise": {"monthly": 0, "description": "Enterprise - Contact sales"},
     },
+    "gemini": {
+        "name": "Gemini (Google)",
+        "hobby": {"monthly": 0, "description": "Free tier"},
+        "pro": {"monthly": 20, "description": "Gemini Advanced - $20/user/month"},
+        "business": {"monthly": 28, "description": "Gemini Business - $28/user/month"},
+        "enterprise": {"monthly": 45, "description": "Gemini Enterprise - $45/user/month"},
+    },
+    "perplexity": {
+        "name": "Perplexity Pro",
+        "hobby": {"monthly": 0, "description": "Free tier with limited searches"},
+        "pro": {"monthly": 20, "description": "Pro - $20/user/month"},
+        "team": {"monthly": 42, "description": "Team - $42/user/month"},
+        "enterprise": {"monthly": 0, "description": "Enterprise - Contact sales"},
+    },
+    "notion_ai": {
+        "name": "Notion AI",
+        "hobby": {"monthly": 0, "description": "Free without AI features"},
+        "pro": {"monthly": 10, "description": "Plus with AI - $10/user/month"},
+        "team": {"monthly": 18, "description": "Business with AI - $18/user/month"},
+        "enterprise": {"monthly": 0, "description": "Enterprise - Contact sales"},
+    },
+    "midjourney": {
+        "name": "Midjourney",
+        "hobby": {"monthly": 0, "description": "Free limited trials"},
+        "pro": {"monthly": 10, "description": "Basic - $10/month"},
+        "team": {"monthly": 30, "description": "Pro - $30/month"},
+        "business": {"monthly": 60, "description": "Mega - $60/month"},
+        "enterprise": {"monthly": 0, "description": "Enterprise - Contact sales"},
+    },
 }
 
 PLAN_RANKING: dict[str, int] = {
@@ -103,44 +132,134 @@ def determine_optimal_plan(
     Returns:
         Tuple of (recommended_plan, recommended_price_per_seat, monthly_savings)
     """
-    current_idx = PLAN_RANKING.get(current_plan, 1)
     current_spend = current_price * seats
+    current_idx = PLAN_RANKING.get(current_plan, 1)
 
     if tool_key == "cursor":
         if current_plan == "enterprise":
-            return ("business", 40, (current_price - 40) * seats)
+            recommended_price = 40 * seats
+            savings = current_spend - recommended_price
+            return ("business", 40, savings)
         elif current_plan == "business":
-            return ("pro", 20, (current_price - 20) * seats)
+            recommended_price = 20 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 20, savings)
         else:
             return (current_plan, current_price, 0)
 
     elif tool_key == "github_copilot":
         if current_plan == "enterprise":
-            return ("team", 19, (current_price - 19) * seats)
+            recommended_price = 19 * seats
+            savings = current_spend - recommended_price
+            return ("team", 19, savings)
         elif current_plan == "team":
-            return ("pro", 10, (current_price - 10) * seats)
+            recommended_price = 10 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 10, savings)
         elif current_plan == "pro":
-            return ("hobby", 0, current_spend)
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
         else:
             return (current_plan, current_price, 0)
 
     elif tool_key == "claude":
         if current_plan == "enterprise":
-            return ("team", 25, current_spend - (25 * seats))
+            recommended_price = 25 * seats
+            savings = current_spend - recommended_price
+            return ("team", 25, savings)
         elif current_plan == "team":
-            return ("pro", 20, (current_price - 20) * seats)
+            recommended_price = 20 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 20, savings)
         elif current_plan == "pro":
-            return ("hobby", 0, current_spend)
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
         else:
             return (current_plan, current_price, 0)
 
     elif tool_key == "chatgpt":
         if current_plan == "enterprise":
-            return ("team", 25, current_spend - (25 * seats))
+            recommended_price = 25 * seats
+            savings = current_spend - recommended_price
+            return ("team", 25, savings)
         elif current_plan == "team":
-            return ("pro", 20, (current_price - 20) * seats)
+            recommended_price = 20 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 20, savings)
         elif current_plan == "pro":
-            return ("hobby", 0, current_spend)
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
+        else:
+            return (current_plan, current_price, 0)
+
+    elif tool_key == "gemini":
+        if current_plan == "enterprise":
+            recommended_price = 28 * seats
+            savings = current_spend - recommended_price
+            return ("business", 28, savings)
+        elif current_plan == "business":
+            recommended_price = 20 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 20, savings)
+        elif current_plan == "pro":
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
+        else:
+            return (current_plan, current_price, 0)
+
+    elif tool_key == "perplexity":
+        if current_plan == "enterprise":
+            recommended_price = 42 * seats
+            savings = current_spend - recommended_price
+            return ("team", 42, savings)
+        elif current_plan == "team":
+            recommended_price = 20 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 20, savings)
+        elif current_plan == "pro":
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
+        else:
+            return (current_plan, current_price, 0)
+
+    elif tool_key == "notion_ai":
+        if current_plan == "enterprise":
+            recommended_price = 18 * seats
+            savings = current_spend - recommended_price
+            return ("team", 18, savings)
+        elif current_plan == "team":
+            recommended_price = 10 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 10, savings)
+        elif current_plan == "pro":
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
+        else:
+            return (current_plan, current_price, 0)
+
+    elif tool_key == "midjourney":
+        if current_plan == "enterprise":
+            recommended_price = 60 * seats
+            savings = current_spend - recommended_price
+            return ("business", 60, savings)
+        elif current_plan == "business":
+            recommended_price = 30 * seats
+            savings = current_spend - recommended_price
+            return ("team", 30, savings)
+        elif current_plan == "team":
+            recommended_price = 10 * seats
+            savings = current_spend - recommended_price
+            return ("pro", 10, savings)
+        elif current_plan == "pro":
+            recommended_price = 0
+            savings = current_spend - recommended_price
+            return ("hobby", 0, savings)
         else:
             return (current_plan, current_price, 0)
 

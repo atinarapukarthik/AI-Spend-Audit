@@ -10,12 +10,15 @@ interface MonitoringProtocolProps {
 export default function MonitoringProtocol({ auditId }: MonitoringProtocolProps) {
   const { toasts, addToast, removeToast } = useToasts();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!email) {
       addToast("Field empty", "error");
       return;
     }
+    if (loading) return;
+    setLoading(true);
     addToast("Article generation started...", "info");
     try {
       const res = await fetch(
@@ -33,6 +36,8 @@ export default function MonitoringProtocol({ auditId }: MonitoringProtocolProps)
       }
     } catch {
       addToast("Network error", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,9 +61,16 @@ export default function MonitoringProtocol({ auditId }: MonitoringProtocolProps)
         />
         <button
           onClick={handleSubmit}
-          className="w-full sm:w-auto px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 font-mono text-xs sm:text-sm uppercase tracking-wider transition-colors whitespace-nowrap cursor-pointer"
+          disabled={loading}
+          className="w-full sm:w-auto px-6 py-3 bg-zinc-800 hover:bg-zinc-700 disabled:bg-zinc-900 disabled:text-zinc-600 text-zinc-300 border border-zinc-700 disabled:border-zinc-800 font-mono text-xs sm:text-sm uppercase tracking-wider transition-colors whitespace-nowrap cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          Initialize Monitoring
+          {loading && (
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+          )}
+          {loading ? "Generating..." : "Initialize Monitoring"}
         </button>
       </div>
     </div>

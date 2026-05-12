@@ -51,7 +51,11 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        os.getenv("PRODUCTION_FRONTEND_URL", ""),
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -80,13 +84,17 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 try:
     supabase.table("blueprints").select("id").limit(1).execute()
 except Exception:
-    print("WARNING: 'blueprints' table does not exist. Run:")
-    print("  CREATE TABLE blueprints (")
-    print("    id UUID PRIMARY KEY,")
-    print("    audit_id UUID NOT NULL,")
-    print("    content TEXT NOT NULL,")
-    print("    created_at TIMESTAMPTZ DEFAULT NOW()")
-    print("  );")
+    print("WARNING: 'blueprints' table may not exist or RLS is blocking")
+
+try:
+    supabase.table("audits").select("id").limit(1).execute()
+except Exception:
+    print("WARNING: Cannot access audits table")
+
+try:
+    supabase.table("leads").select("id").limit(1).execute()
+except Exception:
+    print("WARNING: Cannot access leads table")
 
 
 class ToolInput(BaseModel):

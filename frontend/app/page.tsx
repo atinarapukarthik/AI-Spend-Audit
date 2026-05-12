@@ -40,6 +40,22 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const addTool = () => {
+    setTools([...tools, { tool: "cursor", plan: "pro", seats: 1 }]);
+  };
+
+  const removeTool = (index: number) => {
+    if (tools.length > 1) {
+      setTools(tools.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateTool = (index: number, field: keyof ToolInput, value: string | number) => {
+    const updated = [...tools];
+    updated[index] = { ...updated[index], [field]: value };
+    setTools(updated);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {

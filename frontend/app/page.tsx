@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToasts, default as ToastContainer } from "./components/toast-container";
 
 interface ToolInput {
   tool: string;
@@ -30,6 +31,7 @@ const PLANS = [
 
 export default function Home() {
   const router = useRouter();
+  const { toasts, addToast, removeToast } = useToasts();
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [tools, setTools] = useState<ToolInput[]>([
@@ -37,83 +39,50 @@ export default function Home() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const addTool = () => {
-    setTools([...tools, { tool: "cursor", plan: "pro", seats: 1 }]);
-  };
-
-  const removeTool = (index: number) => {
-    if (tools.length > 1) {
-      setTools(tools.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateTool = (index: number, field: keyof ToolInput, value: string | number) => {
-    const updated = [...tools];
-    updated[index] = { ...updated[index], [field]: value };
-    setTools(updated);
-  };
-
-  const [progressStep, setProgressStep] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("handleSubmit called!");
-    console.log("Email:", email);
-    console.log("Company:", companyName);
-    console.log("Tools:", tools);
+    if (!email) {
+      addToast("Field empty", "error");
+      return;
+    }
+    addToast("Audit analysis in progress...", "info");
     setIsLoading(true);
     setError("");
-    setProgressStep("Submitting your request...");
 
     try {
-      setProgressStep("Calculating savings...");
-      
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/generate-audit`;
-      console.log("Calling API:", apiUrl);
-      
       const response = await fetch(apiUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          company_name: companyName || null,
-          tools,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, company_name: companyName || null, tools }),
       });
 
-      console.log("Response status:", response.status);
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (!response.ok) {
-        setError(data.detail || `Server error (${response.status}). Please try again.`);
-        setProgressStep("");
+        setError(data.detail || `Server error (${response.status})`);
+        setIsLoading(false);
         return;
       }
 
       if (data.status === "success" && data.audit_id) {
-        setProgressStep("Redirecting to your results...");
-        router.push(`/audit/${data.audit_id}`);
+        addToast("Audit review completed!", "success");
+        setTimeout(() => router.push(`/audit/${data.audit_id}`), 800);
       } else {
-        setError("Failed to generate audit. Please try again.");
+        setError("Failed to generate audit.");
+        setIsLoading(false);
       }
     } catch (err) {
       const errMessage = err instanceof Error ? err.message : "Unknown error";
-      if (errMessage.includes("fetch")) {
-        setError("Cannot connect to backend. Make sure the backend is running on port 8000.");
-      } else {
-        setError(`Error: ${errMessage}`);
-      }
-      console.error(err);
-    } finally {
+      setError(errMessage.includes("fetch") ? "Cannot connect to backend." : `Error: ${errMessage}`);
       setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 py-6 sm:py-12 px-4">
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-6 sm:mb-10">
           <h1 className="text-2xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-50 mb-2 sm:mb-3">
@@ -264,7 +233,6 @@ export default function Home() {
                 </svg>
                 <div className="text-left">
                   <div>Analyzing your AI spend...</div>
-                  <div className="text-xs text-blue-200 font-normal">{progressStep}</div>
                 </div>
               </>
             ) : (

@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
+import MonitoringProtocol from "./monitoring-protocol";
+import ReviewToast from "./review-toast";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -68,6 +70,7 @@ export default async function AuditResultsPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-zinc-950 py-6 sm:py-12 px-3 sm:px-4">
+      <ReviewToast />
       <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
 
         {/* Header — Classified Document Masthead */}
@@ -132,25 +135,7 @@ export default async function AuditResultsPage({ params }: PageProps) {
         )}
 
         {/* Protocol: Continuous Monitoring — Visible on ALL states */}
-        <div className="border border-zinc-800 rounded-xl sm:rounded-2xl bg-zinc-900/50 px-4 sm:px-8 py-5 sm:py-6">
-          <p className="text-[10px] sm:text-xs text-zinc-500 font-mono uppercase tracking-widest mb-2 sm:mb-3">
-            Protocol: Continuous Monitoring
-          </p>
-          <p className="text-xs sm:text-sm text-zinc-400 font-mono mb-4 sm:mb-5">
-            Activate monitoring to receive tactical alerts if market variables (pricing) shift
-            or if higher-yield assets emerge.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-lg">
-            <input
-              type="email"
-              placeholder="Email address"
-              className="w-full flex-1 px-4 py-3 bg-zinc-900 border border-zinc-700 text-zinc-200 font-mono text-sm placeholder:text-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
-            />
-            <button className="w-full sm:w-auto px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 font-mono text-xs sm:text-sm uppercase tracking-wider transition-colors whitespace-nowrap">
-              Initialize Monitoring
-            </button>
-          </div>
-        </div>
+        <MonitoringProtocol auditId={id} />
 
         {/* Tool-by-Tool Breakdown */}
         <div className="border border-zinc-800 rounded-xl sm:rounded-2xl bg-zinc-900/50 overflow-hidden">

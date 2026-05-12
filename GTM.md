@@ -1,0 +1,3 @@
+Target Audience: Seed-stage tech founders with teams of 5-15 engineers who are wasting money on duplicate AI subscriptions (e.g., paying for Claude, ChatGPT, and Cursor Pro simultaneously).
+Acquisition Strategy ($0 Budget): I will use Twitter Advanced Search to find founders complaining about AI tool limits or pricing. I will DM them a direct link to the Audit tool: "I built a quick calculator to see if you're overpaying for your AI stack. Might save you $500/mo."
+The Unfair Advantage: We aren't just telling them they are overspending; Credex actually has the discounted credits to fix the problem instantly.

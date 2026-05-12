@@ -1,0 +1,3 @@
+Lead Value (LTV): If the average startup saves $1,000/mo and buys credits through Credex at a 15% margin, that customer generates $1,800/year in revenue for Credex.
+CAC (Customer Acquisition Cost): Using organic Twitter/Reddit outreach, our initial CAC is $0. If we scale to paid ads at $2 per click with a 10% conversion rate, our CAC is $20.
+Path to $1M ARR: At $1,800/year per customer, we need 555 customers. If the audit tool converts 5% of users into buyers, we need 11,100 founders to use this tool over the next 12-18 months.

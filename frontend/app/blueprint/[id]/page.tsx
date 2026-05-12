@@ -45,22 +45,22 @@ export default async function BlueprintPage({ params }: PageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-zinc-950 py-12 px-4">
+    <div className="min-h-screen bg-zinc-950 py-6 sm:py-12 px-3 sm:px-4">
       <div className="max-w-3xl mx-auto">
-        <div className="border border-zinc-800 rounded-2xl bg-zinc-900/50 overflow-hidden">
-          <div className="border-b border-zinc-800 px-8 py-6">
-            <p className="text-xs text-zinc-500 font-mono uppercase tracking-wider mb-1">
+        <div className="border border-zinc-800 rounded-xl sm:rounded-2xl bg-zinc-900/50 overflow-hidden">
+          <div className="border-b border-zinc-800 px-4 sm:px-8 py-4 sm:py-6">
+            <p className="text-[10px] sm:text-xs text-zinc-500 font-mono uppercase tracking-wider mb-1">
               CLASSIFIED // TACTICAL
             </p>
-            <h1 className="text-2xl font-bold text-zinc-100">
+            <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">
               Tactical Resource Memorandum
             </h1>
-            <p className="text-sm text-zinc-500 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1">
               Issued {formattedDate}
             </p>
           </div>
-          <div className="px-8 py-8">
-            <div className="prose prose-invert prose-zinc max-w-none">
+          <div className="px-4 sm:px-8 py-4 sm:py-8">
+            <div className="prose prose-invert prose-zinc max-w-none text-sm sm:text-base">
               {blueprint.content.split("\n").map((line: string, i: number) => {
                 const trimmed = line.trim();
                 if (!trimmed) return <br key={i} />;
@@ -89,8 +89,8 @@ export default async function BlueprintPage({ params }: PageProps) {
               })}
             </div>
           </div>
-          <div className="border-t border-zinc-800 px-8 py-4">
-            <p className="text-xs text-zinc-600 font-mono">
+          <div className="border-t border-zinc-800 px-4 sm:px-8 py-3 sm:py-4">
+            <p className="text-[10px] sm:text-xs text-zinc-600 font-mono">
               Credex Strategic Analysis Engine // {formattedDate}
             </p>
           </div>

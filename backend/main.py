@@ -377,7 +377,7 @@ Task: Generate a complete Tactical Resource Memorandum. If savings are low, expl
             print(f"Blueprint DB insert failed (table may not exist): {db_err}")
             raise HTTPException(status_code=500, detail=f"Blueprint generated but could not be saved. Create the 'blueprints' table in Supabase SQL Editor: CREATE TABLE blueprints (id UUID PRIMARY KEY, audit_id UUID NOT NULL, content TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW());")
 
-        is_local = "localhost" in str(request.url) or "127.0.0.1" in str(request.url)
+        is_local = "localhost" in (request.headers.get("origin") or str(request.url)) or "127.0.0.1" in str(request.url)
         frontend_url = (
             os.getenv("LOCAL_FRONTEND_URL", "http://localhost:3000") if is_local
             else os.getenv("PRODUCTION_FRONTEND_URL", os.getenv("FRONTEND_URL", "http://localhost:3000"))

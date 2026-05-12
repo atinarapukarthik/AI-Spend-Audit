@@ -113,18 +113,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 py-6 sm:py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">
+        <div className="text-center mb-6 sm:mb-10">
+          <h1 className="text-2xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-50 mb-2 sm:mb-3">
             AI Spend Audit
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
             Discover how much your team can save by optimizing AI tool subscriptions
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 space-y-5 sm:space-y-8">
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
               Contact Information
@@ -162,13 +162,13 @@ export default function Home() {
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+              <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-50">
                 AI Tools
               </h2>
               <button
                 type="button"
                 onClick={addTool}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 whitespace-nowrap"
               >
                 + Add another tool
               </button>
